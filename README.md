@@ -1,1 +1,1 @@
-# Most awesome strategy simulation ever
+# BIER FASS - Business Intelligence Entwcklungs Repository für abnormale Strategeie Simulation
