@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import game.map.Castle;
 
@@ -101,10 +102,10 @@ public class Graph<T> {
 	 * @see java.util.stream.Stream#collect(Collector)
 	 * @return Die Liste aller zum Knoten zugehörigen Kanten
 	 */
+	@SuppressWarnings("unlikely-arg-type")
 	public List<Edge<T>> getEdges(Node<T> node) {
 		// TODO: Graph<T>#getEdges(Node<T>)
-	//	return edges.stream().filter();
-		return null;
+		return edges.stream().filter(t->edges.contains(node)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/**
@@ -116,7 +117,8 @@ public class Graph<T> {
 	 * @return Die Kante zwischen beiden Knoten oder null
 	 */
 	public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-		return null;
+		List<Edge<T>> temp = getEdges(nodeA);
+		return temp.stream().filter(t -> temp.contains(nodeB)).findFirst().get();
 	}
 
 	/**

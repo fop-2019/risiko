@@ -170,13 +170,17 @@ public class GameMap {
 	
 	private void connectToCloseCastles (int r, Node<Castle> c) {
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
-			if (castleGraph.getNodes().get(i).equals(c)) {
+			Node <Castle> cI = castleGraph.getNodes().get(i);
+			if (cI.equals(c)) {
 				continue;
 			}
 			else {
-				Node<Castle> ci = castleGraph.getNodes().get(i);
-				if (c.getValue().distance(castleGraph.getNodes().get(i).getValue()) <= r) {
-					castleGraph.addEdge(c, castleGraph.getNodes().get(i));
+				if (c.getValue().distance(cI.getValue()) <= r) {
+					if (castleGraph.getEdge(c, cI) != null) {
+						continue;
+					} else {
+						castleGraph.addEdge(c, cI);
+					}
 				}
 			}
 		}
