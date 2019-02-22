@@ -115,17 +115,10 @@ public class Graph<T> {
      */
     public Node<T> getNode(T value) {
         // TODO: Graph<T>#getNode(T)
-    	Node<T>  found = nodes.stream().filter(null).forEach((p -> {
-    	if (p.getValue() == value) {
-    		return p;
-    	}
-    	else {
-    		;
-    	}
-    	});;
+//    	Node<T>  found =  nodes.stream().filter(Node<T> s-> s.getValue().equals(value));
         return null;
     }
-    
+   
     /**
      * Überprüft, ob alle Knoten in dem Graphen erreichbar sind.
      * @return true, wenn alle Knoten erreichbar sind
