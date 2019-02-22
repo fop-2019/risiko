@@ -1,1 +1,1 @@
-# risiko
+# Most awesome strategy simulation ever

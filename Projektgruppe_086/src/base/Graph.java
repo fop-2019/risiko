@@ -89,7 +89,6 @@ public class Graph<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getAllValues() {
-		// TODO: Graph<T>#getAllValues()
 		return (List<T>) nodes.stream().map(n -> n.getValue());
 	}
 
