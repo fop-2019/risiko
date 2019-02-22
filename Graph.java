@@ -102,11 +102,11 @@ public class Graph<T> {
      * @param nodeA Der erste Knoten
      * @param nodeB Der zweite Knoten
      * @return Die Kante zwischen beiden Knoten oder null
-     */
+     */	
     public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
-        // TODO: Graph<T>#getEdge(Node<T>, Node<T>)
-        return null;
-    }
+		List<Edge<T>> temp = getEdges(nodeA);
+		return temp.stream().filter(t -> temp.contains(nodeB)).findFirst().get();
+	}
 
     /**
      * Gibt den ersten Knoten mit dem angegebenen Wert zurück oder null, falls dieser nicht gefunden wurde
