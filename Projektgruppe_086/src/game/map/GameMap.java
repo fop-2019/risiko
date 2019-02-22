@@ -150,7 +150,9 @@ public class GameMap {
      * Hier werden die Kanten erzeugt
      */
     private void generateEdges() {
-    	 // TODO: GameMap#generateEdges()
+
+        Node<Castle> mostLeft = castleGraph.getNodes().stream().min((castle1, castle2) -> Integer
+				.compare(castle1.getValue().getLocationOnMap().x, castle2.getValue().getLocationOnMap().x)).get();
     }
 
     /**
