@@ -1,1 +1,1 @@
-# risiko
+# Most awesome streategy simulation ever
