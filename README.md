@@ -1,1 +1,1 @@
-# Most awesome streategy simulation ever
+# Most awesome strategy simulation ever
