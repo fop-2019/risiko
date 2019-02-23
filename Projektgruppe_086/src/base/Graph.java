@@ -90,7 +90,7 @@ public class Graph<T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<T> getAllValues() {
-		return (List<T>) nodes.stream().map(n -> n.getValue());
+		return (List<T>) nodes.stream().map(n -> n.getValue()).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/**
@@ -104,8 +104,7 @@ public class Graph<T> {
 	 */
 	@SuppressWarnings("unlikely-arg-type")
 	public List<Edge<T>> getEdges(Node<T> node) {
-		// TODO: Graph<T>#getEdges(Node<T>)
-		return edges.stream().filter(t->edges.contains(node)).collect(Collectors.toCollection(ArrayList::new));
+		return edges.stream().filter(t -> edges.contains(node)).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	/**
