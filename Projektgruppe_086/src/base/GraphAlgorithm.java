@@ -62,7 +62,7 @@ public abstract class GraphAlgorithm<T> {
      * @return Der nächste abzuarbeitende Knoten oder null
      */
 	private Node<T> getSmallestNode() {
-    	double smallestValue = 0;
+    	double smallestValue = -1;
     	Node<T> smallestNode = null;
     	Iterator<Node<T>> it = availableNodes.iterator();
     	while (it.hasNext()) {
