@@ -197,6 +197,10 @@ public class GameMap {
 			castleGraph.addEdge(c, castle);
 		}
 	}
+	
+	private boolean allNodesConnected(Graph<Castle> castleGraph) {
+		
+	}
 
 	/**
 	 * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der

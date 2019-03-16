@@ -1,6 +1,10 @@
 package base;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Abstrakte generische Klasse um Wege zwischen Knoten in einem Graph zu finden.
@@ -57,9 +61,18 @@ public abstract class GraphAlgorithm<T> {
      * Verbindliche Anforderung: Verwenden Sie beim Durchlaufen der Liste Iteratoren
      * @return Der nächste abzuarbeitende Knoten oder null
      */
-    private AlgorithmNode<T> getSmallestNode() {
-        // TODO: GraphAlgorithm<T>#getSmallestNode()
-        return null;
+	private Node<T> getSmallestNode() {
+    	double smallestValue = 0;
+    	Node<T> smallestNode = null;
+    	Iterator<Node<T>> it = availableNodes.iterator();
+    	while (it.hasNext()) {
+    		if (smallestValue > algorithmNodes.get(it.next()).value && algorithmNodes.get(it.next()).value >= 0) {
+    			smallestValue = algorithmNodes.get(it.next()).value;
+    			smallestNode = it.next();
+    		}
+    	}
+    	availableNodes.remove(smallestNode);
+    	return smallestNode;
     }
 
     /**
