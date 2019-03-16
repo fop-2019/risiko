@@ -7,6 +7,8 @@ import gui.Resources;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -152,6 +154,16 @@ public class GameMap {
      */
     private void generateEdges() {
     	 // TODO: GameMap#generateEdges()
+    	//castleGraph.getNodes()
+    	ArrayList<Castle> castleSorted = new ArrayList<Castle>();
+    	for (int i = 0; i > castleSorted.size(); i++) {
+    		if (castleSorted.get(i).getLocationOnMap().x == castleSorted.get(i + 1).getLocationOnMap().x) {
+    			int k = i;		
+    			while (castleSorted.get(k).getLocationOnMap().x == castleSorted.get(k + 1).getLocationOnMap().x) {
+    				k++;
+    			}
+    		}
+    	}
     }
 
     /**

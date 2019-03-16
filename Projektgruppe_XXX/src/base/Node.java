@@ -6,7 +6,7 @@ package base;
  */
 public class Node<T> {
 
-    private T value;
+     T value;
 
     /**
      * Erzeugt einen neuen Knoten mit dem gegebenen Wert

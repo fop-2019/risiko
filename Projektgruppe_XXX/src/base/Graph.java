@@ -115,8 +115,7 @@ public class Graph<T> {
      */
     public Node<T> getNode(T value) {
         // TODO: Graph<T>#getNode(T)
-//    	Node<T>  found =  nodes.stream().filter(Node<T> s-> s.getValue().equals(value));
-        return null;
+         return nodes.stream().filter(n -> n.getValue().equals(value)).findFirst().orElse(null);
     }
    
     /**
