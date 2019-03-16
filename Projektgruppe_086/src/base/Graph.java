@@ -13,6 +13,8 @@ import game.map.Castle;
 /**
  * Diese Klasse representiert einen generischen Graphen mit einer Liste aus
  * Knoten und Kanten.
+ * 
+ * Das hat alex gemacht !!!!!!! :-)
  *
  * @param <T> Die zugrundeliegende Datenstruktur, beispielsweise
  *        {@link game.map.Castle}
@@ -140,6 +142,6 @@ public class Graph<T> {
 	 */
 	public boolean allNodesConnected() {
 		// TODO: Graph<T>#allNodesConnected()
-		return false;
+		return true;
 	}
 }

@@ -160,8 +160,8 @@ public class GameMap {
 	 */
 	private void generateEdges() {
 
-		Node<Castle> mostLeft = castleGraph.getNodes().stream().min((castle1, castle2) -> Integer
-				.compare(castle1.getValue().getLocationOnMap().x, castle2.getValue().getLocationOnMap().x)).get();
+//		Node<Castle> mostLeft = castleGraph.getNodes().stream().min((castle1, castle2) -> Integer
+//				.compare(castle1.getValue().getLocationOnMap().x, castle2.getValue().getLocationOnMap().x)).get();
 
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
 			connectToCloseCastles(((width + height)/8), castleGraph.getNodes().get(i));
@@ -169,6 +169,7 @@ public class GameMap {
 	}
 	
 	private void connectToCloseCastles (int r, Node<Castle> c) {
+		boolean castleConnected = false;
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
 			Node <Castle> cI = castleGraph.getNodes().get(i);
 			if (cI.equals(c)) {
@@ -177,12 +178,23 @@ public class GameMap {
 			else {
 				if (c.getValue().distance(cI.getValue()) <= r) {
 					if (castleGraph.getEdge(c, cI) != null) {
+						castleConnected = true;
 						continue;
 					} else {
 						castleGraph.addEdge(c, cI);
+						castleConnected = true;
 					}
 				}
 			}
+		}
+		if (!castleConnected) {
+			Node<Castle> castle = castleGraph.getNodes().get(1);
+			for (int i = 1; i < castleGraph.getNodes().size(); i ++) {
+				if (castle.getValue().distance(c.getValue()) > c.getValue().distance(castleGraph.getNodes().get(i).getValue())) {
+					castle = castleGraph.getNodes().get(i);
+				}
+			}
+			castleGraph.addEdge(c, castle);
 		}
 	}
 
