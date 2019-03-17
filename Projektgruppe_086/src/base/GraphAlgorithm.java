@@ -90,10 +90,29 @@ public abstract class GraphAlgorithm<T> {
      * @see Graph#getEdges(Node)
      * @see Edge#getOtherNode(Node)
      */
-    public void run() {
-        // TODO: GraphAlgorithm<T>#run()
-    }
+	public void run() {
+	while (availableNodes.size() != 0) {
+		AlgorithmNode<T> smallest = this.getSmallestNode();
+		List<Edge<T>> edges = graph.getEdges();
+		for (Edge<T> edge : edges) {
+			if (!(edge.contains(smallest.node))
+					|| (edge.contains(smallest.node) && this.isPassable(edge) == false)) {
+				edges.remove(edge);
+			}
+		}
 
+		for (Edge<T> edge : edges) {
+			double a = this.getValue(edge) + smallest.value;
+			if (algorithmNodes.get(edge.getOtherNode(smallest.node)).value == -1
+					|| a < algorithmNodes.get(edge.getOtherNode(smallest.node)).value) {
+				algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
+				algorithmNodes.get(edge.getOtherNode(smallest.node)).previous = smallest;
+			} else {
+				algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
+			}
+		}
+	}
+	}
     /**
      * Diese Methode gibt eine Liste von Kanten zurück, die einen Pfad zu dem angegebenen Zielknoten representiert.
      * Dabei werden zuerst beginnend mit dem Zielknoten alle Kanten mithilfe des Vorgängerattributs {@link AlgorithmNode#previous} zu der Liste hinzugefügt.
