@@ -120,9 +120,19 @@ public abstract class GraphAlgorithm<T> {
      * @param destination Der Zielknoten des Pfads
      * @return eine Liste von Kanten oder null
      */
-    public List<Edge<T>> getPath(Node<T> destination) {
-        // TODO: GraphAlgorithm<T>#getPath(Node<T>)
-        return null;
+public List<Edge<T>> getPath(Node<T> destination) {
+        List<Edge<T>> path = new LinkedList<Edge<T>>();
+        
+        Node<T> prev = destination;
+        Node<T> p = algorithmNodes.get(prev).previous.node;
+        while (algorithmNodes.get(prev).previous!=null) {
+        	path.add(graph.getEdge(prev, p));
+        	Node<T> tmp = p;
+        	p=algorithmNodes.get(prev).previous.node;
+        	prev = tmp;
+        }
+        
+        return path;
     }
 
     /**
