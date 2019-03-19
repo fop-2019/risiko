@@ -25,7 +25,15 @@ public class GameMap {
 
 	// Map Generation
 	private double[][] noiseValues;
-	private int width, height, scale;
+	static private int width, height, scale;
+
+	public static int getMapWidth() {
+		return width;
+	}
+
+	public static int getMapHeight() {
+		return height;
+	}
 
 	/**
 	 * Erzeugt eine neue leere Karte. Der Konstruktor sollte niemals direkt
@@ -164,18 +172,17 @@ public class GameMap {
 //				.compare(castle1.getValue().getLocationOnMap().x, castle2.getValue().getLocationOnMap().x)).get();
 
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
-			connectToCloseCastles(((width + height)/8), castleGraph.getNodes().get(i));
+			connectToCloseCastles(((width + height) / 8), castleGraph.getNodes().get(i));
 		}
 	}
-	
-	private void connectToCloseCastles (int r, Node<Castle> c) {
+
+	private void connectToCloseCastles(int r, Node<Castle> c) {
 		boolean castleConnected = false;
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
-			Node <Castle> cI = castleGraph.getNodes().get(i);
+			Node<Castle> cI = castleGraph.getNodes().get(i);
 			if (cI.equals(c)) {
 				continue;
-			}
-			else {
+			} else {
 				if (c.getValue().distance(cI.getValue()) <= r) {
 					if (castleGraph.getEdge(c, cI) != null) {
 						castleConnected = true;
@@ -189,18 +196,19 @@ public class GameMap {
 		}
 		if (!castleConnected) {
 			Node<Castle> castle = castleGraph.getNodes().get(1);
-			for (int i = 1; i < castleGraph.getNodes().size(); i ++) {
-				if (castle.getValue().distance(c.getValue()) > c.getValue().distance(castleGraph.getNodes().get(i).getValue())) {
+			for (int i = 1; i < castleGraph.getNodes().size(); i++) {
+				if (castle.getValue().distance(c.getValue()) > c.getValue()
+						.distance(castleGraph.getNodes().get(i).getValue())) {
 					castle = castleGraph.getNodes().get(i);
 				}
 			}
 			castleGraph.addEdge(c, castle);
 		}
 	}
-	
-	private boolean allNodesConnected(Graph<Castle> castleGraph) {
-		
-	}
+
+//	private boolean allNodesConnected(Graph<Castle> castleGraph) {
+//		
+//	}
 
 	/**
 	 * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der
@@ -274,11 +282,11 @@ public class GameMap {
 	}
 
 	public int getWidth() {
-		return this.backgroundImage.getWidth();
+		return backgroundImage.getWidth();
 	}
 
 	public int getHeight() {
-		return this.backgroundImage.getHeight();
+		return backgroundImage.getHeight();
 	}
 
 	public BufferedImage getBackgroundImage() {
