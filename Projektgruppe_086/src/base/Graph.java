@@ -135,13 +135,109 @@ public class Graph<T> {
 		return null;
 	}
 
-	/**
-	 * Überprüft, ob alle Knoten in dem Graphen erreichbar sind.
-	 * 
-	 * @return true, wenn alle Knoten erreichbar sind
-	 */
-	public boolean allNodesConnected() {
-		// TODO: Graph<T>#allNodesConnected()
-		return true;
-	}
+    /**
+     * Returns list of all connected (indirectly as well) nodes of given nodes.
+     * @param c node 
+     * @return list of nodes
+     */
+    public ArrayList<Node> findConnectedCastles (Node<T> c) {
+    	boolean inMain = false;
+		Node <T> currentCastle = c;
+		ArrayList<Node> visitedCastle = new ArrayList<Node>();		
+		int j = 0;
+		while(!inMain) {
+			if (getEdges(currentCastle).size() != 0) {
+				for (int i = 0; i < getEdges(currentCastle).size() ; i++) {					
+					int k = visitedCastle.size() - 1;
+					
+					if (!visitedCastle.contains(getEdges(currentCastle).get(i).getOtherNode(currentCastle))) {						
+						
+						if(!visitedCastle.contains(currentCastle)) {
+							visitedCastle.add(currentCastle);
+							j = 0;
+						}							
+						
+						currentCastle =  getEdges(currentCastle).get(i).getOtherNode(currentCastle);
+						
+						if(!visitedCastle.contains(currentCastle)) {
+							 visitedCastle.add(currentCastle);
+							 j = 0;
+						}							
+						
+						i = -1;
+					}
+					else if ( j > k &&  i == getEdges(currentCastle).size() - 1) {
+							
+						return visitedCastle;
+					}
+					else if (visitedCastle.contains(getEdges(currentCastle).get(i).getOtherNode(currentCastle)) && i == getEdges(currentCastle).size() - 1) {
+							
+						if(!visitedCastle.contains(currentCastle)) {							 	
+							visitedCastle.add(currentCastle);							 	
+							j = 0;							 
+						}							 
+							 
+						currentCastle =  visitedCastle.get(k - j);
+							
+						if(!visitedCastle.contains(currentCastle)) {						 	
+							visitedCastle.add(currentCastle);							 
+							j = 0;							
+						}							
+						i = 0;							
+						j++;									
+					}	
+					else if (visitedCastle.size() == nodes.size()) {							
+						return visitedCastle;							 
+					}
+				}	
+			}	
+		}   	  
+		return null;
+    }
+        
+        
+        /**
+         * Überprüft, ob alle Knoten in dem Graphen erreichbar sind.
+         * @return true, wenn alle Knoten erreichbar sind
+         */
+        public boolean allNodesConnected() {	
+ 
+        	if(findConnectedCastles(nodes.get(0)).size() == nodes.size()) {
+        		return true;
+        	}
+
+        	else {
+        		ArrayList<Node> forWhile =  findConnectedCastles(getNodes().get(0));
+
+        		while(forWhile.size() != nodes.size()) {       	
+	    			ArrayList<Node> visitedCastle = findConnectedCastles(getNodes().get(0));
+	    			ArrayList<Node> toConnect = null;
+
+	    			for (int k = 0; k < getNodes().size(); k++) {
+	    	    		if (!visitedCastle.contains(getNodes().get(k))) {
+	    	    			 toConnect =	findConnectedCastles(getNodes().get(k));
+	    	    		}	    	    	
+	    	    	}
+	    	    	Node <T> Castle1 = visitedCastle.get(0);
+	    	    	Node <T> Castle2 = toConnect.get(0);
+
+	    	    	for (int l = 0; l < visitedCastle.size(); l++) {	    	    		
+	    	    		Node <T> cCastle = visitedCastle.get(l);
+
+	    	    		for (int h = 0; h < toConnect.size(); h++) {
+	    	    			Node <T> fCastle = toConnect.get(h);	    	    			
+
+	    	    			if (((Castle) cCastle.getValue()).distance((Castle) fCastle.getValue()) <= ((Castle) Castle1.getValue()).distance((Castle) Castle2.getValue()) && !Castle1.equals(Castle2) && !cCastle.equals(fCastle)) {
+	    	    				Castle1 = cCastle;
+	    	    				Castle2 = fCastle;
+	    	    			}	    	    			
+	    		    	}
+	    	    	}
+
+	    	    	addEdge(Castle1, Castle2);
+	    	    	forWhile =  findConnectedCastles(getNodes().get(0));
+        		}
+        		return true;
+        	}
+        }
 }
