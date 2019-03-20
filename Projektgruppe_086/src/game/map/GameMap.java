@@ -168,6 +168,66 @@ public class GameMap {
 		}
 	}
 	
+	    private boolean getCastleList (Node<Castle> c) {
+    	boolean inMain = false;
+		Node <Castle> currentCastle = c;
+		ArrayList<Node> visitedCastle = new ArrayList<Node>();		
+		int j = 0;
+		while(!inMain) {
+			//System.out.println(currentCastle.getValue().getName());
+			if (castleGraph.getEdges(currentCastle).size() != 0) {
+
+				for (int i = 0; i < castleGraph.getEdges(currentCastle).size() ; i++) {
+					System.out.println(i +"    i");
+					System.out.println(castleGraph.getEdges(currentCastle).size() + "  edges");
+					int k = visitedCastle.size() - 1;
+			
+					System.out.println(k +"   k");
+					System.out.println(j +"   j");
+						  if (!visitedCastle.contains(castleGraph.getEdges(currentCastle).get(i).getOtherNode(currentCastle))) {
+						
+							 	if(!visitedCastle.contains(currentCastle)) {
+									System.out.println(currentCastle.getValue().getName() + " --- has neighbour not in visited Castle");
+								visitedCastle.add(currentCastle);
+								//currentCastle.getValue().addTroops(99999);
+								j = 0;
+								}
+							
+								currentCastle =  castleGraph.getEdges(currentCastle).get(i).getOtherNode(currentCastle);
+							
+								i = -1;
+						  }
+
+						 else if (visitedCastle.contains(castleGraph.getEdges(currentCastle).get(i).getOtherNode(currentCastle)) && i == castleGraph.getEdges(currentCastle).size() - 1) {
+							 	if(!visitedCastle.contains(currentCastle)) {
+							 		System.out.println(currentCastle.getValue().getName() + " --- no neighbour in vC"); 
+							 		visitedCastle.add(currentCastle);
+							 		//currentCastle.getValue().addTroops(99999);
+							 		j = 0;
+							 	}
+							 
+						 currentCastle =  visitedCastle.get(k - j);
+							System.out.println(currentCastle.getValue().getName() + " ---"); 
+								if (k - j != 0 ) {
+									 j++;
+								}
+						 
+							
+						 }	
+
+						 else if (visitedCastle.size() == castleGraph.getNodes().size()) {
+							 return true;
+						 }
+				}	
+			}
+			else {
+				inMain = true;
+			}
+			System.out.println(visitedCastle.size() + "   = visitedCastle size");	
+		}   	
+    	return false;
+    }
+	
 	private void connectToCloseCastles (int r, Node<Castle> c) {
 		
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
