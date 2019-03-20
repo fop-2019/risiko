@@ -34,6 +34,10 @@ public class GameMap {
 	public static int getMapHeight() {
 		return height;
 	}
+	
+	public static int getMapScale() {
+		return scale;
+	}
 
 	/**
 	 * Erzeugt eine neue leere Karte. Der Konstruktor sollte niemals direkt
@@ -266,7 +270,9 @@ public class GameMap {
 					}
 				}				
 			}
+
 		}		
+
 	}
 
 	/**

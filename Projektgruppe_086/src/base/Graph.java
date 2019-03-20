@@ -117,10 +117,11 @@ public class Graph<T> {
 	 * @param nodeB Der zweite Knoten
 	 * @return Die Kante zwischen beiden Knoten oder null
 	 */
-	@SuppressWarnings("unlikely-arg-type")
 	public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
 		List<Edge<T>> temp = getEdges(nodeA);
-		return temp.stream().filter(t -> temp.contains(nodeB)).findFirst().get();
+
+		return temp.stream().filter(t -> t.contains(nodeB)).findFirst().orElse(null);
+
 	}
 
 	/**

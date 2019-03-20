@@ -40,56 +40,64 @@ public class Clustering {
 	 * Siehe auch {@link Kingdom#getType()}
 	 */
 	public List<Kingdom> getPointsClusters() {
-		int h, w;
-		List<Kingdom> kList = new ArrayList<Kingdom>();
+		int h, w, s;
+		List<Kingdom> currentKingdoms = new ArrayList<Kingdom>();
+		List<Kingdom> previousKingdoms = new ArrayList<Kingdom>();
 		h = GameMap.getMapHeight();
 		w = GameMap.getMapWidth();
-		int closestCastle = 0;
-		double smallestDist = (int) Math.floor(Math.sqrt((w * w) + (h * h)));
+		s = GameMap.getMapScale();
+//		System.out.println(h + " " + w);
+		int closestKingdom = -1;
+		double smallestDist = (int) Math.floor(Math.sqrt((w * w * s * s) + (h * h * s * s)));
 		Point[] centers = new Point[kingdomCount];
-		
+
 		// generating first random centers
 		for (int i = 0; i < kingdomCount; i++) {
-			centers[i].x = (int) Math.floor(Math.random() * (w + 1));
-			centers[i].y = (int) Math.floor(Math.random() * (h + 1));
-		}
-		
-		//generating first empty kingdoms
-		for (int i = 0; i < kingdomCount; i++) {
-			kList.add(new Kingdom(i));
+			centers[i] = new Point(0, 0);
+			centers[i].x = (int) Math.floor(Math.random() * (w * s + 1));
+			centers[i].y = (int) Math.floor(Math.random() * (h * s + 1));
+//			System.out.println("Centre " + i + " at: x: " + centers[i].x + " y: " + centers[i].y);
 		}
 
-		while (!allCastles.isEmpty()) {
+		// generating first empty kingdoms
+		for (int i = 0; i < kingdomCount; i++) {
+			currentKingdoms.add(new Kingdom(i));
+		}
+		
+		while (currentKingdoms != previousKingdoms) {
 			
-			// adding closest castles to kingdoms 
+			previousKingdoms = currentKingdoms;
+			currentKingdoms.removeAll(previousKingdoms);
 			for (int i = 0; i < kingdomCount; i++) {
-				for (int j = 0; j < allCastles.size(); i++) {
-					if (allCastles.isEmpty()) {
-						return kList;
-					}
-					if (allCastles.get(j).distance(centers[i]) < smallestDist) {
-						smallestDist = allCastles.get(j).distance(centers[i]);
-						closestCastle = j;
+				currentKingdoms.add(new Kingdom(i));
+			}
+			// assigning castles to closest kingdoms
+			for (int i = 0; i < allCastles.size(); i++) {
+				for (int j = 0; j < kingdomCount; j++) {
+					if (allCastles.get(i).distance(centers[j]) < smallestDist) {
+						smallestDist = allCastles.get(i).distance(centers[j]);
+						closestKingdom = j;
 					}
 				}
-				kList.get(i).addCastle(allCastles.get(closestCastle));
-				allCastles.remove(closestCastle);
+				allCastles.get(i).setKingdom(currentKingdoms.get(closestKingdom));
+				closestKingdom = -1;
+				smallestDist = (int) Math.floor(Math.sqrt((w * w * s * s) + (h * h * s * s)));
 			}
-			
-			//generating new centers 
+
+			// generating new centers
 			for (int i = 0; i < kingdomCount; i++) {
 				double newX = 0;
 				double newY = 0;
-				for (int j = 0; j < kList.get(i).getCastles().size(); j++) {
-					newX =+ kList.get(i).getCastles().get(j).getLocationOnMap().getX();
-					newY =+ kList.get(i).getCastles().get(j).getLocationOnMap().getY();
+				for (int j = 0; j < currentKingdoms.get(i).getCastles().size(); j++) {
+					newX = +currentKingdoms.get(i).getCastles().get(j).getLocationOnMap().getX();
+					newY = +currentKingdoms.get(i).getCastles().get(j).getLocationOnMap().getY();
 				}
-				centers[i].setLocation((int) Math.floor (newX / kList.get(i).getCastles().size()), (int) Math.floor (newY / kList.get(i).getCastles().size()));
+				centers[i].setLocation((int) Math.floor(newX / currentKingdoms.get(i).getCastles().size()),
+						(int) Math.floor(newY / currentKingdoms.get(i).getCastles().size()));
 			}
-			
-			
-		}
 
-		return kList;
+		}
+		
+		return currentKingdoms;
 	}
 }
