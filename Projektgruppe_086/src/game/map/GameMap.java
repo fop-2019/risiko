@@ -169,33 +169,43 @@ public class GameMap {
 	}
 	
 	private void connectToCloseCastles (int r, Node<Castle> c) {
-		boolean castleConnected = false;
+		
 		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
+			boolean castleConnected = false;
 			Node <Castle> cI = castleGraph.getNodes().get(i);
-			if (cI.equals(c)) {
+			if (cI.getValue().equals(c.getValue())) {
+			//	System.out.println("same shit");
+				castleConnected = true;
 				continue;
 			}
 			else {
 				if (c.getValue().distance(cI.getValue()) <= r) {
-					if (castleGraph.getEdge(c, cI) != null) {
+					if (castleGraph.getEdge(c, cI) != null || castleGraph.getEdge(cI, c) != null) {
+			
 						castleConnected = true;
 						continue;
-					} else {
+					} 
+					else {
 						castleGraph.addEdge(c, cI);
 						castleConnected = true;
 					}
-				}
+				}				
 			}
+//			if (!castleConnected) {
+//			Node<Castle> closestCastle = castleGraph.getNodes().get(0);
+//			Node<Castle> oldClosestCastle = castleGraph.getNodes().get(0);
+//			for (int j = 1; j < castleGraph.getNodes().size(); j ++) {
+//				Node<Castle> currentCastle = castleGraph.getNodes().get(j);
+//				if (c.getValue().distance(closestCastle.getValue()) > c.getValue().distance(currentCastle.getValue()) && !c.getValue().equals(currentCastle.getValue()) && c.getValue().distance(currentCastle.getValue()) >= r) {
+//					oldClosestCastle = closestCastle;
+//					closestCastle = currentCastle;
+//				}
+//				//System.out.println( c.getValue().getName() + " ----- " + castle.getValue().getName());
+//			}
+//			castleGraph.addEdge(c, closestCastle);
+//			//castleGraph.addEdge(c, oldClosestCastle);
 		}
-		if (!castleConnected) {
-			Node<Castle> castle = castleGraph.getNodes().get(1);
-			for (int i = 1; i < castleGraph.getNodes().size(); i ++) {
-				if (castle.getValue().distance(c.getValue()) > c.getValue().distance(castleGraph.getNodes().get(i).getValue())) {
-					castle = castleGraph.getNodes().get(i);
-				}
-			}
-			castleGraph.addEdge(c, castle);
-		}
+		
 	}
 	
 	private boolean allNodesConnected(Graph<Castle> castleGraph) {
