@@ -155,18 +155,86 @@ public class GameMap {
 		}
 	}
 
-	/**
-	 * Hier werden die Kanten erzeugt
-	 */
-	private void generateEdges() {
-
-//		Node<Castle> mostLeft = castleGraph.getNodes().stream().min((castle1, castle2) -> Integer
-//				.compare(castle1.getValue().getLocationOnMap().x, castle2.getValue().getLocationOnMap().x)).get();
-
-		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
-			connectToCloseCastles(((width + height)/8), castleGraph.getNodes().get(i));
+    /**
+     * Hier werden die Kanten erzeugt. Dazu werden zunächst alle Burgen durch eine Linie verbunden und anschließend
+     * jede Burg mit allen anderen in einem bestimmten Radius nochmals verbunden
+     */
+    private void generateEdges() {
+    	// radius for edges
+    	int tile = 0;
+    	if (castleGraph.getNodes().size() < 20) {
+    		System.out.println("less than 20");
+    		 tile = (width * scale +  height * scale) / 8;	
+    	}
+    	else if (castleGraph.getNodes().size() >= 20 && castleGraph.getNodes().size() <= 45 ) {
+    		System.out.println("between 20 and 45");
+    		 tile = (width * scale +  height * scale) / 10;	
+    	}
+    	else if (castleGraph.getNodes().size() > 45) {
+    		System.out.println("more than 45");
+    		 tile = (width * scale +  height * scale) / 12;	
+    	}
+    	
+    	// calls connecting function for each castle
+    	for (int i = 0; i < castleGraph.getNodes().size(); i++) {	
+				connectToCloseCastles(tile, castleGraph.getNodes().get(i));			
 		}
-	}
+    	
+    	
+    	// checks all castles with 0 Edges and connects them to nearest castle
+		for (int i = 0; i < castleGraph.getNodes().size(); i++) {
+			Node <Castle> currentCastle = castleGraph.getNodes().get(i);
+			if (castleGraph.getEdges(currentCastle).size() == 0) {
+				//System.out.println("check  " + currentCastle.getValue().getName());
+				Node <Castle> closestCastle = castleGraph.getNodes().get(0);
+				if (currentCastle.getValue().equals(closestCastle.getValue())) {
+					closestCastle = castleGraph.getNodes().get(1);
+				}
+				//System.out.println("check closest Castle  " + closestCastle.getValue().getName());
+				for (int j = 0; j <castleGraph.getNodes().size(); j++) {				
+					Node <Castle> cI = castleGraph.getNodes().get(j);
+					if (currentCastle.getValue().distance(cI.getValue()) <= currentCastle.getValue().distance(closestCastle.getValue()) && !currentCastle.getValue().equals(cI.getValue())) {
+						closestCastle = cI;
+					}
+
+				}
+				//System.out.println( currentCastle.getValue().getName() + " ----- " + closestCastle.getValue().getName());
+				castleGraph.addEdge(currentCastle, closestCastle);
+			}
+		}
+		//System.out.println(  "  " + castleGraph.getNodes().get(0).getValue().getName());
+		
+    	// checks all castles with 1 edge and connects them to nearest castle that is further away then 1 tile
+		for (int j = 0; j < castleGraph.getNodes().size(); j++) {
+			Node <Castle> currentCastle = castleGraph.getNodes().get(j);
+			//System.out.println(castleGraph.getEdges(currentCastle).size() + "  size of edges of   " + currentCastle.getValue().getName() );
+			if (castleGraph.getEdges(currentCastle).size() == 1) {
+				//System.out.println("check  " + currentCastle.getValue().getName());
+				Node <Castle> closestCastle = castleGraph.getNodes().get(0);
+				if (currentCastle.getValue().equals(closestCastle.getValue())) {
+					closestCastle = castleGraph.getNodes().get(1);
+				}				
+				//System.out.println("check closest Castle  " + closestCastle.getValue().getName());
+				for (int k = 0; k <castleGraph.getNodes().size(); k++) {				
+					Node <Castle> cI = castleGraph.getNodes().get(k);
+					//filter out all nodes that are not cI  - fList needs to be empty so we know there isn't an exisiting edge to that castle already
+					Object[] fList = castleGraph.getEdges(currentCastle).stream().filter(t -> t.getOtherNode(currentCastle).equals(cI)).toArray();					
+					if (currentCastle.getValue().distance(cI.getValue()) <= currentCastle.getValue().distance(closestCastle.getValue()) && !currentCastle.getValue().equals(cI.getValue()) && currentCastle.getValue().distance(cI.getValue()) > tile && fList.length == 0) {
+						closestCastle = cI;
+						//System.out.println(hi.length);
+					}
+
+				}
+				//System.out.println( currentCastle.getValue().getName() + " ----- " + closestCastle.getValue().getName());
+				castleGraph.addEdge(currentCastle, closestCastle);
+			}
+		}
+    	
+    	
+    	
+    	getCastleList(castleGraph.getNodes().get(0));
+//    	castleGraph.addEdge(castleGraph.getNodes().get(0), castleGraph.getNodes().get(1));
+    }
 	
 	    private boolean getCastleList (Node<Castle> c) {
     	boolean inMain = false;
