@@ -25,7 +25,15 @@ public class GameMap {
 
 	// Map Generation
 	private double[][] noiseValues;
-	private int width, height, scale;
+	static private int width, height, scale;
+
+	public static int getMapWidth() {
+		return width;
+	}
+
+	public static int getMapHeight() {
+		return height;
+	}
 
 	/**
 	 * Erzeugt eine neue leere Karte. Der Konstruktor sollte niemals direkt
@@ -224,6 +232,7 @@ public class GameMap {
 						//System.out.println(hi.length);
 					}
 
+
 				}
 				//System.out.println( currentCastle.getValue().getName() + " ----- " + closestCastle.getValue().getName());
 				castleGraph.addEdge(currentCastle, closestCastle);
@@ -305,8 +314,7 @@ public class GameMap {
 			//	System.out.println("same shit");
 				castleConnected = true;
 				continue;
-			}
-			else {
+			} else {
 				if (c.getValue().distance(cI.getValue()) <= r) {
 					if (castleGraph.getEdge(c, cI) != null || castleGraph.getEdge(cI, c) != null) {
 			
@@ -335,10 +343,10 @@ public class GameMap {
 		}
 		
 	}
-	
-	private boolean allNodesConnected(Graph<Castle> castleGraph) {
-		
-	}
+
+//	private boolean allNodesConnected(Graph<Castle> castleGraph) {
+//		
+//	}
 
 	/**
 	 * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der
@@ -412,11 +420,11 @@ public class GameMap {
 	}
 
 	public int getWidth() {
-		return this.backgroundImage.getWidth();
+		return backgroundImage.getWidth();
 	}
 
 	public int getHeight() {
-		return this.backgroundImage.getHeight();
+		return backgroundImage.getHeight();
 	}
 
 	public BufferedImage getBackgroundImage() {
