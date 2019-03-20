@@ -34,6 +34,10 @@ public class GameMap {
 	public static int getMapHeight() {
 		return height;
 	}
+	
+	public static int getMapScale() {
+		return scale;
+	}
 
 	/**
 	 * Erzeugt eine neue leere Karte. Der Konstruktor sollte niemals direkt
@@ -327,26 +331,10 @@ public class GameMap {
 					}
 				}				
 			}
-//			if (!castleConnected) {
-//			Node<Castle> closestCastle = castleGraph.getNodes().get(0);
-//			Node<Castle> oldClosestCastle = castleGraph.getNodes().get(0);
-//			for (int j = 1; j < castleGraph.getNodes().size(); j ++) {
-//				Node<Castle> currentCastle = castleGraph.getNodes().get(j);
-//				if (c.getValue().distance(closestCastle.getValue()) > c.getValue().distance(currentCastle.getValue()) && !c.getValue().equals(currentCastle.getValue()) && c.getValue().distance(currentCastle.getValue()) >= r) {
-//					oldClosestCastle = closestCastle;
-//					closestCastle = currentCastle;
-//				}
-//				//System.out.println( c.getValue().getName() + " ----- " + castle.getValue().getName());
-//			}
-//			castleGraph.addEdge(c, closestCastle);
-//			//castleGraph.addEdge(c, oldClosestCastle);
+
 		}
 		
 	}
-
-//	private boolean allNodesConnected(Graph<Castle> castleGraph) {
-//		
-//	}
 
 	/**
 	 * Hier werden die Burgen in Königreiche unterteilt. Dazu wird der
