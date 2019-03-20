@@ -17,18 +17,20 @@ public class Castle {
     private Kingdom kingdom;
     private Point location;
     private String name;
+    public boolean flag;
 
     /**
      * Eine neue Burg erstellen
      * @param location die Koordinaten der Burg
      * @param name der Name der Burg
      */
-    public Castle(Point location, String name) {
+    public Castle(Point location, String name, boolean flag) {
         this.location = location;
         this.troopCount = 0;
         this.owner = null;
         this.kingdom = null;
         this.name = name;
+        this.flag = false;
     }
 
     public Player getOwner() {

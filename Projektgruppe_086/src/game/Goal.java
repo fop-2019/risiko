@@ -5,10 +5,12 @@ public abstract class Goal {
     private Game game;
     private final String description;
     private final String name;
+    public int modeId;
 
-    public Goal(String name, String description) {
+    public Goal(String name, String description, int modeId) {
         this.name = name;
         this.description = description;
+        this.modeId = modeId;
     }
 
     public void setGame(Game game) {
@@ -29,5 +31,9 @@ public abstract class Goal {
 
     protected Game getGame() {
         return this.game;
+    }
+    
+    protected int getModeId() {
+        return this.modeId;
     }
 }

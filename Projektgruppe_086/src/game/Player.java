@@ -14,12 +14,14 @@ public abstract class Player {
     private Color color;
     private int points;
     private int remainingTroops;
+    public int flagRounds;
 
     protected Player(String name, Color color) {
         this.name = name;
         this.points = 0;
         this.color = color;
         this.remainingTroops = 0;
+        this.flagRounds = 0;
     }
 
     public int getRemainingTroops() {

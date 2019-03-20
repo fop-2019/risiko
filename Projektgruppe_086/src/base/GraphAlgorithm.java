@@ -55,113 +55,69 @@ public abstract class GraphAlgorithm<T> {
         this.algorithmNodes.get(sourceNode).value = 0;
     }
 
-    /**
-     * Diese Methode gibt einen Knoten mit dem kleinsten Wert, der noch nicht abgearbeitet wurde, zurück und entfernt ihn aus der Liste {@link #availableNodes}.
-     * Sollte kein Knoten gefunden werden, wird null zurückgegeben.
-     * Verbindliche Anforderung: Verwenden Sie beim Durchlaufen der Liste Iteratoren
-     * @return Der nächste abzuarbeitende Knoten oder null
-     */
-	private Node<T> getSmallestNode() {
-    	double smallestValue = -1;
-    	Node<T> smallestNode = null;
-    	Iterator<Node<T>> it = availableNodes.iterator();
-    	while (it.hasNext()) {
-    		if (smallestValue > algorithmNodes.get(it.next()).value && algorithmNodes.get(it.next()).value >= 0) {
-    			smallestValue = algorithmNodes.get(it.next()).value;
-    			smallestNode = it.next();
+    
+
+
+
+
+private AlgorithmNode<T> getSmallestNode() {
+    if (availableNodes.size() == 0 || availableNodes == null) return null;
+    
+    Node<T> currentLow = null;
+    
+    for (Node<T> node : availableNodes) {
+    	if (currentLow == null) {
+    		currentLow = node;
+    	} else {
+    		if (algorithmNodes.get(currentLow).value >= algorithmNodes.get(node).value && algorithmNodes.get(node).value >= 0 && algorithmNodes.get(currentLow).value >= 0) {
+    			currentLow = node;
+    		} 
+    	}
+    }
+    for (Node<T> node : availableNodes) {
+    	if (algorithmNodes.get(currentLow).value == algorithmNodes.get(node).value) {
+    		availableNodes.remove(node);
+    		return algorithmNodes.get(node);
+    	}
+    }
+    	
+    return null;
+}
+
+
+public void run() {
+   	while (availableNodes.size()!= 0) {
+    	AlgorithmNode<T> smallest = this.getSmallestNode();
+    	List<Edge<T>> edges = graph.getEdges();
+    	for (Edge<T> edge:edges) {
+    		if (!(edge.contains(smallest.node)) || (edge.contains(smallest.node) && this.isPassable(edge) == false)) {
+    			edges.remove(edge);
     		}
     	}
-    	availableNodes.remove(smallestNode);
-    	return smallestNode;
+    	
+    	for (Edge<T> edge:edges) {
+    		double a = this.getValue(edge) + smallest.value;
+    		if (algorithmNodes.get(edge.getOtherNode(smallest.node)).value == -1 || a < algorithmNodes.get(edge.getOtherNode(smallest.node)).value) {
+    			algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
+    			algorithmNodes.get(edge.getOtherNode(smallest.node)).previous = smallest;
+    		} else {
+    			algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
+    		}
+    	}
     }
+}
 
-    /**
-     * Diese Methode startet den Algorithmus. Dieser funktioniert wie folgt:
-     * 1. Suche den Knoten mit dem geringsten Wert (siehe {@link #getSmallestNode()})
-     * 2. Für jede angrenzende Kante:
-     * 2a. Überprüfe ob die Kante passierbar ist ({@link #isPassable(Edge)})
-     * 2b. Berechne den Wert des Knotens, in dem du den aktuellen Wert des Knotens und den der Kante addierst
-     * 2c. Ist der alte Wert nicht gesetzt (-1) oder ist der neue Wert kleiner, setze den neuen Wert und den Vorgängerknoten
-     * 3. Wiederhole solange, bis alle Knoten abgearbeitet wurden
-
-     * Nützliche Methoden:
-     * @see #getSmallestNode()
-     * @see #isPassable(Edge)
-     * @see Graph#getEdges(Node)
-     * @see Edge#getOtherNode(Node)
-     */
-	public void run() {
-	while (availableNodes.size() != 0) {
-		AlgorithmNode<T> smallest = this.getSmallestNode();
-		List<Edge<T>> edges = graph.getEdges();
-		for (Edge<T> edge : edges) {
-			if (!(edge.contains(smallest.node))
-					|| (edge.contains(smallest.node) && this.isPassable(edge) == false)) {
-				edges.remove(edge);
-			}
-		}
-
-		for (Edge<T> edge : edges) {
-			double a = this.getValue(edge) + smallest.value;
-			if (algorithmNodes.get(edge.getOtherNode(smallest.node)).value == -1
-					|| a < algorithmNodes.get(edge.getOtherNode(smallest.node)).value) {
-				algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
-				algorithmNodes.get(edge.getOtherNode(smallest.node)).previous = smallest;
-			} else {
-				algorithmNodes.get(edge.getOtherNode(smallest.node)).value = a;
-			}
-		}
-	}
-	}
-    /**
-     * Diese Methode gibt eine Liste von Kanten zurück, die einen Pfad zu dem angegebenen Zielknoten representiert.
-     * Dabei werden zuerst beginnend mit dem Zielknoten alle Kanten mithilfe des Vorgängerattributs {@link AlgorithmNode#previous} zu der Liste hinzugefügt.
-     * Zum Schluss muss die Liste nur noch umgedreht werden. Sollte kein Pfad existieren, geben Sie null zurück.
-     * @param destination Der Zielknoten des Pfads
-     * @return eine Liste von Kanten oder null
-     */
 public List<Edge<T>> getPath(Node<T> destination) {
-        List<Edge<T>> path = new LinkedList<Edge<T>>();
-        
-        Node<T> prev = destination;
-        Node<T> p = algorithmNodes.get(prev).previous.node;
-        while (algorithmNodes.get(prev).previous!=null) {
-        	path.add(graph.getEdge(prev, p));
-        	Node<T> tmp = p;
-        	p=algorithmNodes.get(prev).previous.node;
-        	prev = tmp;
-        }
-        
-        return path;
+    List<Edge<T>> path = new LinkedList<Edge<T>>();
+    
+    Node<T> prev = destination;
+    Node<T> p = algorithmNodes.get(prev).previous.node;
+    while (algorithmNodes.get(prev).previous!=null) {
+    	path.add(graph.getEdge(prev, p));
+    	Node<T> tmp = p;
+    	p=algorithmNodes.get(prev).previous.node;
+    	prev = tmp;
     }
-
-    /**
-     * Gibt den betrachteten Graphen zurück
-     * @return der zu betrachtende Graph
-     */
-    protected Graph<T> getGraph() {
-        return this.graph;
-    }
-
-    /**
-     * Gibt den Wert einer Kante zurück.
-     * Diese Methode ist abstrakt und wird in den implementierenden Klassen definiert um eigene Kriterien für Werte zu ermöglichen.
-     * @param edge Eine Kante
-     * @return Ein Wert, der der Kante zugewiesen wird
-     */
-    protected abstract double getValue(Edge<T> edge);
-
-    /**
-     * Gibt an, ob eine Kante passierbar ist.
-     * @param edge Eine Kante
-     * @return true, wenn die Kante passierbar ist.
-     */
-    protected abstract boolean isPassable(Edge<T> edge);
-
-    /**
-     * Gibt an, ob eine Knoten passierbar ist.
-     * @param node Eine Knoten
-     * @return true, wenn der Knoten passierbar ist.
-    */
-    protected abstract boolean isPassable(Node<T> node);
+    
+    return path;
 }

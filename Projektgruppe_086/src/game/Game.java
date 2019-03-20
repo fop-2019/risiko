@@ -2,6 +2,7 @@ package game;
 
 import java.util.*;
 
+import game.goals.OwnSuperCastle;
 import game.map.Castle;
 import game.map.Kingdom;
 import game.map.GameMap;
@@ -219,7 +220,14 @@ public class Game {
 
         if(goal.isCompleted()) {
             endGame();
+            
             return;
+        }
+
+        // wenn OwnSuperCastle gespielt wird, addiere einen Punkt für den Besitzer der Flagge
+        if (goal.getModeId() == 2) {
+        	gameMap.flagCastle.getOwner().flagRounds ++;
+        	
         }
 
         // Choose next player

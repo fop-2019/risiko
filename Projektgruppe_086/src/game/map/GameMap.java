@@ -22,10 +22,11 @@ public class GameMap {
 	private BufferedImage backgroundImage;
 	private Graph<Castle> castleGraph;
 	private List<Kingdom> kingdoms;
+	public Castle flagCastle;
 
 	// Map Generation
 	private double[][] noiseValues;
-	private int width, height, scale;
+	public int width, height, scale;
 
 	/**
 	 * Erzeugt eine neue leere Karte. Der Konstruktor sollte niemals direkt
@@ -129,7 +130,12 @@ public class GameMap {
 					if (noiseValues[x_mid][y_mid] >= 0.6) {
 						String name = possibleNames.isEmpty() ? "Burg " + (castlesGenerated + 1)
 								: possibleNames.get((int) (Math.random() * possibleNames.size()));
-						Castle newCastle = new Castle(new Point(x0 + x, y0 + y), name);
+						if (castlesGenerated == 1) {
+							Castle newCastle = new Castle(new Point(x0 + x, y0 + y), name, true);
+							flagCastle = newCastle;
+						} else {
+							Castle newCastle = new Castle(new Point(x0 + x, y0 + y), name, false);
+						}
 						boolean doesIntersect = false;
 
 						for (Castle r : castleGraph.getAllValues()) {
@@ -196,10 +202,6 @@ public class GameMap {
 			}
 			castleGraph.addEdge(c, castle);
 		}
-	}
-	
-	private boolean allNodesConnected(Graph<Castle> castleGraph) {
-		
 	}
 
 	/**

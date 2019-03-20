@@ -8,13 +8,16 @@ import game.map.Castle;
 public class ConquerGoal extends Goal {
 
     public ConquerGoal() {
-        super("Eroberung", "Derjenige Spieler gewinnt, der als erstes alle Gebiete erobert hat.");
+        super("Eroberung", "Derjenige Spieler gewinnt, der als erstes alle Gebiete erobert hat.", 1);
     }
 
     @Override
     public boolean isCompleted() {
-        return this.getWinner() != null;
-    }
+    	if (modeId == 1) {
+    		return this.getWinner() != null;
+    	}
+    	return false;
+    }	
 
     @Override
     public Player getWinner() {

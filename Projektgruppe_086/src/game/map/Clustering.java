@@ -34,7 +34,7 @@ public class Clustering {
      * Siehe auch {@link Kingdom#getType()}
      */
     public List<Kingdom> getPointsClusters() {
-        // TODO Clustering#getPointsClusters()
+    		GameMap.
         return new ArrayList<>();
     }
 }
